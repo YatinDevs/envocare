@@ -113,7 +113,7 @@ const BlogHeroSection = ({ onSearch }) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search for articles..."
-            className="px-4 py-3 text-black rounded-l-md w-80 border border-gray-300"
+            className="px-4 py-3 text-white rounded-l-md w-80 border border-gray-300"
           />
           <button
             onClick={() => onSearch(searchTerm)}

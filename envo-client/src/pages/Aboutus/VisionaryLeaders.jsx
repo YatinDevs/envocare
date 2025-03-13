@@ -3,12 +3,18 @@ import { motion } from "framer-motion";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper";
 import { Crown, Lightbulb, Globe, Users } from "lucide-react";
 
+import user1 from "../../../public/assets/profile-pictures/user1.jpg";
+import user2 from "../../../public/assets/profile-pictures/user2.jpg";
+import user3 from "../../../public/assets/profile-pictures/user3.jpg";
+import user4 from "../../../public/assets/profile-pictures/user4.jpg";
+import user5 from "../../../public/assets/profile-pictures/user5.jpg";
+import user6 from "../../../public/assets/profile-pictures/user6.jpg";
 export const leadersData = [
   {
     name: "Punam Jagdish Marathe",
     title: "Directors",
     icon: <Crown className="w-10 h-10 text-blue-500" />,
-    image: "user1",
+    image: user1,
     description:
       "Punam leads Suviam with strategic vision, ensuring long-term growth and innovation.",
   },
@@ -16,7 +22,7 @@ export const leadersData = [
     name: "Priyanka Mukund Kale",
     title: "Directors",
     icon: <Lightbulb className="w-10 h-10 text-blue-500" />,
-    image: "user2",
+    image: user2,
     description:
       "Priyanka drives Suviam’s creative initiatives, crafting innovative solutions and brand storytelling.",
   },
@@ -24,7 +30,7 @@ export const leadersData = [
     name: "Ajinkya Prakash Patil",
     title: "CEO",
     icon: <Globe className="w-10 h-10 text-blue-500" />,
-    image: "user3",
+    image: user3,
     description:
       "Ajinkya steers Suviam’s operations and strategy, ensuring sustainable business growth.",
   },
@@ -32,7 +38,7 @@ export const leadersData = [
     name: "Mayur Prakash Patil",
     title: "Technical and Accounts Advisor",
     icon: <Users className="w-10 h-10 text-blue-500" />,
-    image: "user4",
+    image: user4,
     description:
       "Mayur oversees technical and financial strategies, ensuring efficiency and accuracy.",
   },
@@ -40,7 +46,7 @@ export const leadersData = [
     name: "Lalchand Shankar Pawar",
     title: "Manager",
     icon: <Users className="w-10 h-10 text-blue-500" />,
-    image: "user5",
+    image: user5,
     description:
       "Lalchand ensures seamless daily operations, managing resources and team performance.",
   },

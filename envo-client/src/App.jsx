@@ -11,6 +11,8 @@ import Aboutus from "./pages/Aboutus/Aboutus";
 import BlogDetails from "./pages/Blog/BlogDetails";
 import Services from "./pages/Services/Services";
 import Blog from "./pages/Blog/Blog";
+import Projects from "./pages/Projects/Projects";
+import Contact from "./pages/Contactus/Contactus";
 
 function App() {
   const router = createBrowserRouter(
@@ -20,8 +22,10 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/aboutus" element={<Aboutus />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/projects" element={<Projects />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogDetails />} />
+        <Route path="/contactus" element={<Contact />} />
       </Route>
     )
   );

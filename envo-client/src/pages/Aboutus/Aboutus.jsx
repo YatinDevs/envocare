@@ -14,6 +14,7 @@ import { MdGavel } from "react-icons/md";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper";
 import VisionaryLeaders from "./VisionaryLeaders";
 import aboutData from "@/constants/about";
+import AboutHeroCarousel from "./AboutHeroCarousel";
 
 const iconComponents = {
   FaIndustry: <FaIndustry />,
@@ -22,6 +23,12 @@ const iconComponents = {
   MdGavel: <MdGavel />,
 };
 
+const images = [
+  "https://images.unsplash.com/photo-1496016943515-7d33598c11e6?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://plus.unsplash.com/premium_photo-1713218938418-0d3892c16ee6?q=80&w=1078&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1486671736870-2f695ecdf813?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://plus.unsplash.com/premium_photo-1733306503324-201addc17a12?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+];
 function Aboutus() {
   return (
     <>
@@ -30,29 +37,35 @@ function Aboutus() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mt-35 flex flex-col justify-center items-center px-4 sm:px-8 lg:px-16 rounded-2xl"
+          className="mt-20 flex flex-col justify-center items-center px-4 sm:px-8 lg:px-16 rounded-2xl"
         >
           <ContentWrapper>
-            <div className="max-w-[1440px] flex flex-col lg:flex-row justify-center items-center gap-10">
+            <div className="max-w-[1440px] flex flex-col  justify-center items-center gap-10">
               {/* About Us Content */}
-              <motion.div>{/* Add Image Carousel here  */}</motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="w-full flex flex-col gap-5"
-              >
+              <motion.div className="m-2 px-5 py-5">
                 <h2 className="text-2xl text-center sm:text-4xl font-bold text-blue-800">
                   About Us
                 </h2>
-                {aboutData.description.map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className="text-sm sm:text-lg p-2 text-gray-700"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+              </motion.div>
+              <motion.div className="max-w-[1440px] flex flex-col lg:flex-row justify-center items-center gap-10">
+                <motion.div className="m-2 px-5 py-10">
+                  <AboutHeroCarousel images={images} />
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="w-full flex flex-col gap-5"
+                >
+                  {aboutData.description.map((paragraph, index) => (
+                    <p
+                      key={index}
+                      className="text-sm sm:text-lg p-2 text-gray-700"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </motion.div>
               </motion.div>
             </div>
           </ContentWrapper>

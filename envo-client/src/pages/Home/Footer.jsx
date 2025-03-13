@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import {
   FaFacebookF,
   FaTwitter,
@@ -10,127 +9,117 @@ import {
 } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { IoLocationOutline, IoCallOutline } from "react-icons/io5";
-import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
+import { motion } from "framer-motion";
 
 const Footer = () => {
-  const navigate = useNavigate();
+  const socialIcons = [
+    FaFacebookF,
+    FaTwitter,
+    FaLinkedinIn,
+    FaRss,
+    FaYoutube,
+    FaInstagram,
+  ];
 
   return (
-    <footer className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 text-white py-12 w-full px-8">
-      <ContentWrapper>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* About Envocare */}
-          <div>
-            <h3 className="text-lg font-bold mb-4 text-yellow-500">
-              ABOUT ENVOCARE
-            </h3>
-            <p className="text-sm text-gray-300">
-              Pioneering sustainable solutions for environmental management,
-              specializing in waste treatment, water purification, and
-              eco-friendly initiatives.
-            </p>
-            <div className="my-2">
-              <h3 className="text-xl font-bold my-2 text-yellow-500">
-                USEFUL LINKS
-              </h3>
-              <div className="flex flex-col justify-start items-start text-sm space-y-2">
-                {["ABOUT US", "SERVICES", "PROJECTS", "BLOG", "CONTACT US"].map(
-                  (link) => (
-                    <button
-                      key={link}
-                      onClick={() =>
-                        navigate(`/${link.toLowerCase().replace(" ", "")}`)
-                      }
-                      className="hover:text-yellow-500 cursor-pointer"
-                    >
-                      &gt; {link}
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Our Services */}
-          <div className="flex flex-col gap-5">
-            <div>
-              <h3 className="text-lg font-bold mb-4 text-yellow-500">
-                OUR SERVICES
-              </h3>
-              <ul className="text-sm space-y-2">
-                {[
-                  "Waste Management",
-                  "Water Treatment",
-                  "Environmental Consulting",
-                  "Sustainable Solutions",
-                ].map((service) => (
-                  <li
-                    key={service}
-                    className="hover:text-yellow-500 cursor-pointer"
-                  >
-                    &gt; {service}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-4 text-yellow-500">
-                CUSTOMER SUPPORT
-              </h3>
-              <ul className="text-sm space-y-2">
-                {[
-                  "FAQs",
-                  "Terms & Conditions",
-                  "Privacy Policy",
-                  "Contact Us",
-                ].map((item) => (
-                  <li
-                    key={item}
-                    className="hover:text-yellow-500 cursor-pointer"
-                  >
-                    &gt; {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Contact Details */}
-          <div className="text-center">
-            <h3 className="text-lg font-bold mb-4 text-yellow-500">
-              CONTACT DETAILS
-            </h3>
-            <div className="flex items-center">
-              <IoLocationOutline size={60} className="text-yellow-500" />
-              <span className="m-4 text-md">
-                123 Greenway Street, EcoCity, Earth
-              </span>
-            </div>
-            <div className="flex items-center">
-              <IoCallOutline size={24} className="text-yellow-500" />
-              <span className="ml-4">+91 9876543210</span>
-            </div>
-            <div className="flex items-center">
-              <MdOutlineEmail size={24} className="text-yellow-500" />
-              <span className="ml-4">support@envocare.com</span>
-            </div>
-          </div>
+    <footer className="bg-gray-900 text-white py-16 px-8">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+        {/* Logo and About Section */}
+        <div>
+          <img src="/logo.png" alt="Company Logo" className="mb-6 w-36" />
+          <h3 className="text-lg font-semibold mb-4 text-blue-400">
+            ABOUT COMPANY
+          </h3>
+          <ul className="space-y-2 text-gray-300 text-sm">
+            <li>About Us</li>
+            <li>Milestones</li>
+            <li>Manufacturing</li>
+            <li>Investor Relations</li>
+            <li>Awards</li>
+          </ul>
         </div>
-        {/* Social Media */}
-        <div className="flex flex-col md:flex-row justify-center items-center gap-2 md:gap-8 md:mt-10 text-gray-300 border-t border-gray-600 pt-6">
-          <div className="text-lg font-bold md:mb-4 text-yellow-500">
-            CONNECT WITH US
-          </div>
-          <div className="flex justify-center space-x-3 text-gray-300 mb-4">
-            <FaFacebookF className="hover:text-yellow-500 cursor-pointer" />
-            <FaTwitter className="hover:text-yellow-500 cursor-pointer" />
-            <FaLinkedinIn className="hover:text-yellow-500 cursor-pointer" />
-            <FaRss className="hover:text-yellow-500 cursor-pointer" />
-            <FaYoutube className="hover:text-yellow-500 cursor-pointer" />
-            <FaInstagram className="hover:text-yellow-500 cursor-pointer" />
-          </div>
+
+        {/* Products Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4 text-blue-400">PRODUCTS</h3>
+          <ul className="space-y-2 text-gray-300 text-sm">
+            <li>Engineering</li>
+            <li>Resins</li>
+            <li>Specialty Chemicals</li>
+            <li>Membranes</li>
+            <li>Instruments & Automation</li>
+          </ul>
         </div>
-      </ContentWrapper>
+
+        {/* Services Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4 text-blue-400">SERVICES</h3>
+          <ul className="space-y-2 text-gray-300 text-sm">
+            <li>Operation & Maintenance</li>
+            <li>Rehabilitation & Modification</li>
+            <li>Consumables & Spares</li>
+            <li>Audits & Consultancy</li>
+            <li>Project Financing</li>
+          </ul>
+        </div>
+
+        {/* Locations Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4 text-blue-400">
+            OUR LOCATIONS
+          </h3>
+          <ul className="space-y-2 text-gray-300 text-sm">
+            <li>APAC</li>
+            <li>Europe</li>
+            <li>India</li>
+            <li>Middle East</li>
+            <li>North America</li>
+          </ul>
+        </div>
+      </div>
+      <div className="flex flex-col md:flex-row justify-around items-center gap-2">
+        {/* Social Media Icons */}
+        <div className="mt-10 flex justify-center space-x-6">
+          {socialIcons.map((Icon, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.2 }}
+              className="cursor-pointer text-gray-400 hover:text-blue-400"
+            >
+              <Icon size={24} />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Contact Information */}
+        <div className="mt-10 text-center space-y-2 text-gray-300">
+          <p>
+            <IoLocationOutline size={20} className="inline mr-2" /> 123 Greenway
+            Street, EcoCity, Earth
+          </p>
+          <p>
+            <IoCallOutline size={20} className="inline mr-2" /> +91 9876543210
+          </p>
+          <p>
+            <MdOutlineEmail size={20} className="inline mr-2" />{" "}
+            support@envocare.com
+          </p>
+        </div>
+      </div>
+
+      {/* Copyright and Links */}
+      <div className="mt-8 text-center text-gray-500 text-sm border-t border-gray-700 pt-4">
+        <p>
+          © 2025 All Rights Reserved by Rich System Solution.{" "}
+          <a href="#" className="text-blue-400 hover:underline">
+            Privacy Policy
+          </a>{" "}
+          |{" "}
+          <a href="#" className="text-blue-400 hover:underline">
+            Terms of Use
+          </a>
+        </p>
+      </div>
     </footer>
   );
 };

@@ -42,6 +42,7 @@ const images = [
   { name: "WapcoSs", src: WapcoSs },
   { name: "York", src: York },
 ];
+
 function Home() {
   return (
     <div className="">
@@ -49,7 +50,6 @@ function Home() {
       <VideoSection />
       <Counter />
       <Carousel data={images} />
-      {/* <CoreServices /> */}
       <FeatureSection />
       <ServicesSection />
       <Testimonials />
