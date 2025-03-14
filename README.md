@@ -397,3 +397,499 @@ Login with the credentials you just created.
 
 - pass : envocare@123
 - user : envocares@gmail.com
+
+✅ Step 1: Set Up Laravel Backend
+
+1.1 Install Laravel
+
+1.  Create a New Laravel Project
+    Run the following command to create a new Laravel project:
+
+          composer create-project --prefer-dist laravel/laravel cms-backend
+
+Replace cms-backend with your desired project name.
+
+2.  Navigate to the Project Directory
+    Move into the project folder:
+
+          cd cms-backend
+
+3.  Generate Application Key
+    Run the following command to generate a unique application key:
+
+         php artisan key:generate
+
+1.2 Set Up Database
+
+1.  Create a MySQL Database
+
+         Create a new database (e.g., cms_db) using phpMyAdmin or your preferred MySQL client.
+
+2.  Update .env File
+
+         Open the .env file and update the database credentials:
+
+            env
+            Copy
+            DB_CONNECTION=mysql
+            DB_HOST=127.0.0.1
+            DB_PORT=3306
+            DB_DATABASE=cms_db
+            DB_USERNAME=root
+            DB_PASSWORD=
+
+3.  Run Migrations
+
+Create a database in your local MySQL server and update the .env file with your database credentials. Then, run the following
+
+create database cms_envo;
+
+Execute the default migrations to create the necessary tables:
+
+         php artisan migrate
+
+1.3 Install Filament for Admin Panel
+
+1.  Install Filament
+    Run the following command to install Filament:
+
+          composer require filament/filament
+
+2.  Publish Filament Assets
+
+    Publish Filament's configuration and assets:
+
+            php artisan filament:install --panels
+
+3.  Create an Admin User
+
+        Create the first admin user for the Filament panel:
+
+             php artisan make:filament-user
+
+    Provide the following details when prompted:
+
+         Name: admin
+         Email: envocares@gmail.com
+         Password: admin123
+
+4.  Access Filament Admin Panel
+
+        Start the Laravel development server:
+              php artisan route:list
+
+         check route to access for admin panel:
+             php artisan serve
+
+    Visit the Filament admin panel at:
+
+    http://127.0.0.1:8000/envoadmin
+    Log in with the admin credentials you just created.
+
+# ✅ Step 2: Create Database Schema for CMS Content
+
+2.1 Create a Migration for contents Table
+
+Run the following command to create a migration for the contents table:
+
+         php artisan make:migration create_contents_table
+
+2.2 Define the Schema
+
+Open the newly created migration file in database/migrations/ and define the schema:
+
+      public function up()
+      {
+      Schema::create('contents', function (Blueprint $table) {
+      $table->id();
+      $table->string('section_name')->unique();
+      $table->json('content');
+      $table->timestamps();
+      });
+      }
+
+2.3 Run the Migration
+
+Execute the migration to create the contents table:
+
+         php artisan migrate
+
+✅ Step 3: Create Models and Controllers
+
+3.1 Create a Model for contents Table
+Run the following command to create a model:
+
+         php artisan make:model Content
+
+3.2 Create a Controller for API Endpoints
+Run the following command to create a controller:
+
+         php artisan make:controller Api/ContentController
+
+3.3 Define API Routes
+
+Open routes/api.php and define the API routes:
+
+      use App\Http\Controllers\Api\ContentController;
+
+      Route::get('/content/{section}', [ContentController::class, 'getContent']);
+      Route::put('/content/{section}', [ContentController::class, 'updateContent'])->middleware('auth:sanctum');
+
+3.4 Implement Controller Methods
+
+Open app/Http/Controllers/Api/ContentController.php and implement the methods:
+
+         namespace App\Http\Controllers\Api;
+
+         use App\Models\Content;
+         use Illuminate\Http\Request;
+         use App\Http\Controllers\Controller;
+
+         class ContentController extends Controller
+         {
+         // Get content for a specific section
+         public function getContent($section)
+            {
+               $content = Content::where('section_name', $section)->first();
+               return response()->json($content);
+         }
+
+            // Update content for a specific section (Admin only)
+            public function updateContent(Request $request, $section)
+            {
+               $request->validate([
+                     'content' => 'required|json',
+               ]);
+
+               $content = Content::updateOrCreate(
+                     ['section_name' => $section],
+                     ['content' => $request->content]
+               );
+
+               return response()->json($content);
+            }
+
+         }
+
+✅ Step 4: Set Up Filament Resource for CMS Content
+4.1 Create a Filament Resource
+Run the following command to create a Filament resource for managing dynamic content:
+
+bash
+Copy
+php artisan make:filament-resource Content
+4.2 Customize the Resource
+Open the newly created resource in app/Filament/Resources/ContentResource.php and customize it:
+
+php
+Copy
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\ContentResource\Pages;
+use App\Models\Content;
+use Filament\Forms;
+use Filament\Resources\Form;
+use Filament\Resources\Resource;
+use Filament\Resources\Table;
+use Filament\Tables;
+
+class ContentResource extends Resource
+{
+protected static ?string $model = Content::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-collection';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('section_name')
+                    ->required()
+                    ->unique(),
+                Forms\Components\Textarea::make('content')
+                    ->required()
+                    ->json(),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('section_name'),
+                Tables\Columns\TextColumn::make('content')->limit(50),
+            ])
+            ->filters([]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListContents::route('/'),
+            'create' => Pages\CreateContent::route('/create'),
+            'edit' => Pages\EditContent::route('/{record}/edit'),
+        ];
+    }
+
+}
+4.3 Add the Resource to Filament Navigation
+Open app/Providers/FilamentServiceProvider.php and add the resource to the navigation:
+
+php
+Copy
+protected function getNavigationItems(): array
+{
+return [
+// Other navigation items
+ContentResource::class,
+];
+}
+
+✅ Step 5: Test the API Endpoints
+Start the Laravel Server
+Run the following command to start the Laravel development server:
+
+bash
+Copy
+php artisan serve
+Test the API
+Use tools like Postman or cURL to test the API endpoints:
+
+GET http://127.0.0.1:8000/api/content/home
+Fetch content for the home section.
+
+PUT http://127.0.0.1:8000/api/content/home
+Update content for the home section (requires authentication).
+
+Create a Filament Resource for Testimonials
+Generate a Filament resource for testimonials:
+
+bash
+Copy
+php artisan make:filament-resource Testimonial
+This will create a TestimonialResource in the app/Filament/Resources directory.
+
+Edit the TestimonialResource
+Update the TestimonialResource to manage testimonials:
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\TestimonialResource\Pages;
+use App\Models\Testimonial;
+use Filament\Forms;
+use Filament\Resources\Form;
+use Filament\Resources\Resource;
+use Filament\Resources\Table;
+use Filament\Tables;
+
+class TestimonialResource extends Resource
+{
+protected static ?string $model = Testimonial::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-chat-alt-2';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('content')
+                    ->required(),
+                Forms\Components\TextInput::make('position')
+                    ->maxLength(255),
+                Forms\Components\FileUpload::make('image')
+                    ->image()
+                    ->directory('testimonials')
+                    ->preserveFilenames(),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('position'),
+                Tables\Columns\ImageColumn::make('image'),
+            ])
+            ->filters([
+                //
+            ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListTestimonials::route('/'),
+            'create' => Pages\CreateTestimonial::route('/create'),
+            'edit' => Pages\EditTestimonial::route('/{record}/edit'),
+        ];
+    }
+
+}
+Add Testimonials to Filament Navigation
+Edit the TestimonialResource to add it to the Filament navigation:
+protected static ?string $navigationGroup = 'Content Management';
+
+2. Create an API to Fetch Testimonials
+   Create an API Controller
+   Generate an API controller for testimonials:
+
+bash
+Copy
+php artisan make:controller Api/TestimonialController --api
+Edit the TestimonialController (app/Http/Controllers/Api/TestimonialController.php):
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Testimonial;
+use Illuminate\Http\Request;
+
+class TestimonialController extends Controller
+{
+// Fetch all testimonials
+public function index()
+{
+$testimonials = Testimonial::all();
+        return response()->json($testimonials);
+}
+
+    // Fetch a single testimonial
+    public function show($id)
+    {
+        $testimonial = Testimonial::findOrFail($id);
+        return response()->json($testimonial);
+    }
+
+}
+Define API Routes
+Add API routes in routes/api.php:
+
+php
+Copy
+use App\Http\Controllers\Api\TestimonialController;
+
+Route::apiResource('testimonials', TestimonialController::class);
+
+3. Consume the API in React
+   Set Up React
+   If you haven’t already set up React, you can use a tool like Vite or Create React App.
+
+Fetch Testimonials in React
+In your React app, create a component to fetch and display testimonials:
+
+jsx
+Copy
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+const Testimonials = () => {
+const [testimonials, setTestimonials] = useState([]);
+
+    useEffect(() => {
+        // Fetch testimonials from the Laravel API
+        axios.get('http://your-laravel-app.test/api/testimonials')
+            .then(response => {
+                setTestimonials(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching testimonials:', error);
+            });
+    }, []);
+
+    return (
+        <div>
+            <h1>Testimonials</h1>
+            {testimonials.map(testimonial => (
+                <div key={testimonial.id}>
+                    <h3>{testimonial.name}</h3>
+                    <p>{testimonial.content}</p>
+                    <p><em>{testimonial.position}</em></p>
+                    {testimonial.image && (
+                        <img
+                            src={`http://your-laravel-app.test/storage/${testimonial.image}`}
+                            alt={testimonial.name}
+                            width="100"
+                        />
+                    )}
+                </div>
+            ))}
+        </div>
+    );
+
+};
+
+export default Testimonials;
+Add the Component to Your App
+
+4. Handle CORS (Cross-Origin Resource Sharing)
+   If your React +++++++++
+   app is running on a different domain (e.g., localhost:3000), you need to configure CORS in Laravel.
+
+Install the fruitcake/laravel-cors package:
+
+bash
+Copy
+composer require fruitcake/laravel-cors
+Publish the CORS configuration file:
+
+bash
+Copy
+php artisan vendor:publish --tag="cors"
+Edit the config/cors.php file to allow your React app’s domain:
+
+php
+Copy
+'paths' => ['api/*'],
+'allowed_methods' => ['*'],
+'allowed_origins' => ['http://localhost:3000'], // Add your React app's URL
+'allowed_headers' => ['*'],
+
+## Setup Cors middleware
+
+If you're not using Laravel's built-in CORS middleware (\Illuminate\Http\Middleware\HandleCors::class), you can create a custom middleware to handle CORS.
+
+Step 1: Create the Middleware
+Run the following command to create a new middleware:
+
+bash
+Copy
+php artisan make:middleware Cors
+
+Step 2: Edit the Middleware
+Open the newly created middleware file (app/Http/Middleware/Cors.php) and add the following code:
+
+php
+Copy
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class Cors
+{
+public function handle(Request $request, Closure $next)
+    {
+        // Add CORS headers
+        $response = $next($request);
+
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+
+        return $response;
+    }
+
+}
+
+Step 3: Register the Middleware
+Ensure the middleware is registered in the $middleware array in app/Http/Kernel.php:
+
+php
+Copy
+protected $middleware = [
+\App\Http\Middleware\Cors::class, // Custom CORS middleware
+// Other middleware
+];

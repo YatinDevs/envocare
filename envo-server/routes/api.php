@@ -1,13 +1,10 @@
 <?php
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\TestimonialController;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/test', function () {
+    return 'API is working!';
 });
 
-Route::middleware('api')->group(function () {
-    Route::get('/testimonials', [TestimonialController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/user', function (\Illuminate\Http\Request $request) {
+    return $request->user();
 });

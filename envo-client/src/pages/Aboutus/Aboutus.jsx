@@ -15,6 +15,7 @@ import ContentWrapper from "@/components/ContentWrapper/ContentWrapper";
 import VisionaryLeaders from "./VisionaryLeaders";
 import aboutData from "@/constants/about";
 import AboutHeroCarousel from "./AboutHeroCarousel";
+import Location from "./Location";
 
 const iconComponents = {
   FaIndustry: <FaIndustry />,
@@ -127,6 +128,7 @@ function Aboutus() {
             ))}
           </div>
         </motion.div>
+        <Location />
 
         {/* Visionary Leaders Section */}
         <VisionaryLeaders />

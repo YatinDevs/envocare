@@ -1,9 +1,9 @@
+import { useEffect, useState } from "react";
 import { Card, Row, Col } from "antd";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import Location from "../Aboutus/Location";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-
 const Counter = ({ target }) => {
   const [count, setCount] = useState(0);
 
@@ -90,19 +90,7 @@ const ServicesSection = () => {
           plant’s performance to give you a complete package of benefits.
         </p>
       </motion.div>
-      <div className="mt-10">
-        <h3 className="text-xl font-semibold mb-4">Our Locations</h3>
-        <MapContainer
-          center={[19.076, 72.8777]}
-          zoom={13}
-          style={{ height: "400px", width: "100%" }}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Marker position={[19.076, 72.8777]}>
-            <Popup>Ion Exchange, Mumbai</Popup>
-          </Marker>
-        </MapContainer>
-      </div>
+      <Location />
     </div>
   );
 };

@@ -7,9 +7,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware('api')->group(function () {
-    Route::get('/testimonials', [TestimonialController::class, 'index']);
-});
+// Route::middleware('api')->group(function () {
+//     Route::get('/testimonials', [TestimonialController::class, 'index']);
+// });
 
 Route::get('/db-test', function () {
     try {

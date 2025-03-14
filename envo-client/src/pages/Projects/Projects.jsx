@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Card } from "antd";
 import Carousel from "@/components/Carousel/Carousel";
@@ -21,6 +22,7 @@ import {
   York,
 } from "../../../public/assets";
 import ProjectDetailSection from "./ProjectDetailSection";
+
 const images = [
   { name: "CIIDCO", src: CIIDCO },
   { name: "DeolaliBoard", src: DeolaliBoard },
@@ -38,6 +40,7 @@ const images = [
   { name: "WapcoSs", src: WapcoSs },
   { name: "York", src: York },
 ];
+
 const credentials = [
   {
     id: 1,

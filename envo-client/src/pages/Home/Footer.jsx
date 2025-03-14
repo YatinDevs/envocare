@@ -92,7 +92,7 @@ const Footer = () => {
         </div>
 
         {/* Contact Information */}
-        <div className="mt-10 text-center space-y-2 text-gray-300">
+        <div className="mt-10 text-center flex flex-col justify-center items-start text-gray-300">
           <p>
             <IoLocationOutline size={20} className="inline mr-2" /> 123 Greenway
             Street, EcoCity, Earth
