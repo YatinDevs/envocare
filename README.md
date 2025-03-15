@@ -893,3 +893,187 @@ protected $middleware = [
 \App\Http\Middleware\Cors::class, // Custom CORS middleware
 // Other middleware
 ];
+
+## Making Testimonial Section Dynamic
+
+1.1 Create a Migration for testimonials Table
+Run the following command to create a migration:
+
+        php artisan make:migration create_testimonials_table
+
+Open the newly created migration file in database/migrations/ and define the schema:
+
+        public function up()
+        {
+            Schema::create('testimonials', function (Blueprint $table) {
+                $table->id();
+                $table->string('customer_name');
+                $table->string('image_url');
+                $table->float('rating');
+                $table->text('feedback');
+                $table->timestamps();
+            });
+        }
+
+Run the migration to create the table:
+
+        php artisan migrate
+
+1.2 Create a Model for testimonials Table
+
+Run the following command to create a model:
+
+        php artisan make:model Testimonial
+
+1.3 Create a Controller for Testimonials API
+
+        php artisan make:controller Api/TestimonialController
+
+Open the newly created controller (app/Http/Controllers/Api/TestimonialController.php) and implement the index method:
+
+        namespace App\Http\Controllers\Api;
+
+        use App\Models\Testimonial;
+        use App\Http\Controllers\Controller;
+        use Illuminate\Http\Request;
+
+        class TestimonialController extends Controller
+        {
+            // Fetch all testimonials
+            public function index()
+            {
+                $testimonials = Testimonial::all();
+                return response()->json($testimonials);
+            }
+        }
+
+1.4 Define API Routes
+
+Open routes/api.php and define the API route for fetching testimonials:
+
+            use App\Http\Controllers\Api\TestimonialController;
+
+            Route::get('/testimonials', [TestimonialController::class, 'index']);
+
+1.5 Seed Testimonials Data (Optional)
+
+Create a seeder to populate the testimonials table with dummy data:
+
+            php artisan make:seeder TestimonialSeeder
+
+Open database/seeders/TestimonialSeeder.php and add the following:
+
+        use App\Models\Testimonial;
+        use Illuminate\Database\Seeder;
+
+        class TestimonialSeeder extends Seeder
+        {
+            public function run()
+            {
+                Testimonial::create([
+                    'customer_name' => 'Government Project Engineer',
+                    'image_url' => 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                    'rating' => 4.5,
+                    'feedback' => 'Suviam Infra has been a reliable partner in our irrigation projects. Their RCC pipes are of exceptional quality, and their team ensures timely project execution.',
+                ]);
+
+                Testimonial::create([
+                    'customer_name' => 'Infrastructure Developer',
+                    'image_url' => 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                    'rating' => 4.5,
+                    'feedback' => 'The attention to detail and the quality of the product exceeded my expectations. Highly recommended!',
+                ]);
+
+                // Add more testimonials as needed
+            }
+        }
+
+Run the seeder:
+
+            php artisan db:seed --class=TestimonialSeeder
+
+## Adding Filament Testimonial Resource
+
+### Step 1: Install Filament
+
+Install Filament (if not already installed):
+
+composer require filament/filament
+php artisan filament:install --panels
+Create a Filament Resource:
+
+## Step 2
+
+Run the following command to create a Filament resource for managing testimonials:
+
+php artisan make:filament-resource Testimonial
+
+## Step 3
+
+Customize the Resource:
+Open the newly created resource (app/Filament/Resources/TestimonialResource.php) and customize it:
+
+            namespace App\Filament\Resources;
+
+            use App\Filament\Resources\TestimonialResource\Pages;
+            use App\Models\Testimonial;
+            use Filament\Forms;
+            use Filament\Resources\Form;
+            use Filament\Resources\Resource;
+            use Filament\Resources\Table;
+            use Filament\Tables;
+
+            class TestimonialResource extends Resource
+            {
+                protected static ?string $model = Testimonial::class;
+
+                protected static ?string $navigationIcon = 'heroicon-o-chat';
+
+                public static function form(Form $form): Form
+                {
+                    return $form
+                        ->schema([
+                            Forms\Components\TextInput::make('customer_name')
+                                ->required(),
+                            Forms\Components\TextInput::make('image_url')
+                                ->required(),
+                            Forms\Components\TextInput::make('rating')
+                                ->numeric()
+                                ->required(),
+                            Forms\Components\Textarea::make('feedback')
+                                ->required(),
+                        ]);
+                }
+
+                public static function table(Table $table): Table
+                {
+                    return $table
+                        ->columns([
+                            Tables\Columns\TextColumn::make('customer_name'),
+                            Tables\Columns\TextColumn::make('rating'),
+                            Tables\Columns\TextColumn::make('feedback')->limit(50),
+                        ])
+                        ->filters([]);
+                }
+
+                public static function getPages(): array
+                {
+                    return [
+                        'index' => Pages\ListTestimonials::route('/'),
+                        'create' => Pages\CreateTestimonial::route('/create'),
+                        'edit' => Pages\EditTestimonial::route('/{record}/edit'),
+                    ];
+                }
+            }
+
+4. Add the Resource to Filament Navigation:
+
+Open app/Providers/FilamentServiceProvider.php and add the resource to the navigation:
+
+        protected function getNavigationItems(): array
+        {
+            return [
+                // Other navigation items
+                TestimonialResource::class,
+            ];
+        }

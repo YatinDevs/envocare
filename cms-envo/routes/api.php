@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Api\TestimonialController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,4 +14,3 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('testimonials', TestimonialController::class);

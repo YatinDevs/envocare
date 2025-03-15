@@ -16,28 +16,23 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class TestimonialResource extends Resource
 {
     protected static ?string $model = Testimonial::class;
-    protected static ?string $navigationGroup = 'Reviews';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left';
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                //
-                Forms\Components\TextInput::make('name')
-                ->required()
-                ->maxLength(255),
-            Forms\Components\Textarea::make('content')
+        ->schema([
+            Forms\Components\TextInput::make('customer_name')
                 ->required(),
-            Forms\Components\TextInput::make('position')
-                ->maxLength(255),
-            Forms\Components\FileUpload::make('image')
-                ->image()
-                ->directory('testimonials')
-                ->preserveFilenames(),
-
-            ]);
+            Forms\Components\TextInput::make('image_url')
+                ->required(),
+            Forms\Components\TextInput::make('rating')
+                ->numeric()
+                ->required(),
+            Forms\Components\Textarea::make('feedback')
+                ->required(),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -45,9 +40,9 @@ class TestimonialResource extends Resource
         return $table
             ->columns([
                 //
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('position'),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\TextColumn::make('customer_name'),
+                Tables\Columns\TextColumn::make('rating'),
+                Tables\Columns\TextColumn::make('feedback')->limit(50),
             ])
             ->filters([
                 //
