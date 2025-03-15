@@ -25,7 +25,11 @@ class TestimonialResource extends Resource
         ->schema([
             Forms\Components\TextInput::make('customer_name')
                 ->required(),
-            Forms\Components\TextInput::make('image_url')
+            Forms\Components\FileUpload::make('image_url') // Replace with FileUpload
+                ->label('Customer Image')
+                ->image() // Ensures only images can be uploaded
+                ->directory('testimonials') // Folder to store the images
+                ->preserveFilenames() // Preserve original filenames
                 ->required(),
             Forms\Components\TextInput::make('rating')
                 ->numeric()
@@ -40,6 +44,9 @@ class TestimonialResource extends Resource
         return $table
             ->columns([
                 //
+                Tables\Columns\ImageColumn::make('image_url') // Display the image
+                ->label('Customer Image')
+                ->disk('public'), // Use the 'public' disk
                 Tables\Columns\TextColumn::make('customer_name'),
                 Tables\Columns\TextColumn::make('rating'),
                 Tables\Columns\TextColumn::make('feedback')->limit(50),

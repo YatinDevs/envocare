@@ -51,7 +51,12 @@ const Testimonials = () => {
               key={index}
               className="w-full bg-gray-100 rounded-lg text-center"
             >
-              <ReviewCard {...review} />
+              <ReviewCard
+                imgURL={`http://127.0.0.1:8000/storage/${review.image_url}`} // Prepend base URL
+                customerName={review.customer_name}
+                rating={review.rating}
+                feedback={review.feedback}
+              />
             </SwiperSlide>
           ))}
       </Swiper>
