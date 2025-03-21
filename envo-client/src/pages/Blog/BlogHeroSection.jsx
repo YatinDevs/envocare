@@ -1,64 +1,58 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-const blogHeroContent = [
-  {
-    image:
-      "https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=2070&auto=format&fit=crop",
-    title: "Stay Updated with the Latest Insights",
-    description:
-      "Explore expert opinions, industry trends, and thought-provoking articles from our team.",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1532619187608-e5375cab36fd?q=80&w=2070&auto=format&fit=crop",
-    title: "Discover New Ideas & Innovations",
-    description:
-      "Dive deep into our knowledge base and enrich your understanding with our well-researched blogs.",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1587613755643-89c1636df571?q=80&w=2070&auto=format&fit=crop",
-    title: "Expand Your Horizons with Expert Content",
-    description:
-      "Our writers bring you the latest in technology, business, and sustainability.",
-  },
-];
+import axios from "axios";
 
 const BlogHeroSection = ({ onSearch }) => {
+  const [heroContent, setHeroContent] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { image, title, description } = blogHeroContent[currentIndex];
   const [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    const fetchBlogHeroSection = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/blog-hero-sections"
+        );
+        console.log(response);
+        setHeroContent(response.data);
+      } catch (error) {
+        console.error("Error fetching blog-hero-sections:", error);
+      }
+    };
 
+    fetchBlogHeroSection();
+  }, []);
   useEffect(() => {
     const interval = setInterval(() => {
       nextImage();
     }, 5000);
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, [currentIndex, heroContent]);
 
   const nextImage = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % blogHeroContent.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % heroContent.length);
   };
 
   const prevImage = () => {
     setCurrentIndex(
-      (prevIndex) =>
-        (prevIndex - 1 + blogHeroContent.length) % blogHeroContent.length
+      (prevIndex) => (prevIndex - 1 + heroContent.length) % heroContent.length
     );
   };
+  if (heroContent.length === 0) return null;
+  const { image_url, title, description } = heroContent[currentIndex];
 
   return (
     <div className="relative shadow-2xl w-full h-[500px] md:h-[600px] flex items-center justify-center text-white overflow-hidden rounded-bl-[30%] md:rounded-bl-[15%] rounded-tr-[30%] md:rounded-tr-[15%]">
       {/* Background Image with Overlay */}
       <motion.div
-        key={image}
+        key={image_url}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5 }}
         className="absolute inset-0 w-full h-full bg-cover bg-center before:content-[''] before:absolute before:inset-0 before:bg-black/60"
-        style={{ backgroundImage: `url(${image})` }}
+        style={{
+          backgroundImage: `url(http://127.0.0.1:8000/storage/${image_url})`,
+        }}
       ></motion.div>
 
       {/* Left Arrow Button */}

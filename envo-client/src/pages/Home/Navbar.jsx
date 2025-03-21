@@ -9,6 +9,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hideTopBar, setHideTopBar] = useState(false);
   const [mobileMargin, setMobileMargin] = useState(120);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(window.scrollY);
 
   const navigate = useNavigate();
 
@@ -18,7 +20,19 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY) {
+        // Scrolling down
+        setShowNavbar(false);
+      } else {
+        // Scrolling up
+        setShowNavbar(true);
+      }
+
+      setLastScrollY(currentScrollY);
+
+      if (currentScrollY > 50) {
         setHideTopBar(true);
         setMobileMargin(70);
       } else {
@@ -29,10 +43,14 @@ const Navbar = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   return (
-    <header className="text-white relative z-[100]">
+    <header
+      className={`text-white fixed top-0 left-0 w-full z-[100] transition-transform duration-500 ${
+        showNavbar ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       {/* Top Bar - Animated Disappearance on Scroll */}
       <div
         className={`bg-gradient-to-r rounded-b-xl from-orange-900 to-orange-700 text-gray-200 flex flex-wrap justify-between items-center px-4 md:px-10 text-sm transition-transform duration-500 ${
@@ -64,11 +82,12 @@ const Navbar = () => {
           >
             <ContentWrapper>
               <div className="p-2 rounded-full mx-10">
-                <img
+                {/* <img
                   className="h-12 md:h-10 object-cover rounded-2xl shadow-md active:scale-95"
                   src={navLogo}
                   alt="Envocare"
-                />
+                /> */}
+                <h1 className=" font-extrabold py-2 text-xl ">ENVOCARE</h1>
               </div>
             </ContentWrapper>
           </div>

@@ -1077,3 +1077,273 @@ Open app/Providers/FilamentServiceProvider.php and add the resource to the navig
                 TestimonialResource::class,
             ];
         }
+
+pass - admin123
+id - envocares@gmail.com
+
+## Making Visionary Leaders Section Dynamic
+
+# Implementing CMS for Visionary Leaders Section
+
+## 1. Create a Migration for the Leaders Table
+
+Run the following command to create a migration:
+
+```sh
+php artisan make:migration create_leaders_table
+```
+
+Open the newly created migration file in `database/migrations/` and define the schema:
+
+```php
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up()
+    {
+        Schema::create('leaders', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('title');
+            $table->string('icon');
+            $table->string('image_url');
+            $table->text('description');
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('leaders');
+    }
+};
+```
+
+Run the migration to create the table:
+
+```sh
+php artisan migrate
+```
+
+## 2. Create a Model for Leaders
+
+Run the following command to create a model:
+
+```sh
+php artisan make:model Leader
+```
+
+Open `app/Models/Leader.php` and define the model:
+
+```php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Leader extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name', 'title', 'icon', 'image_url', 'description'
+    ];
+}
+```
+
+## 3. Create a Controller for API Access
+
+```sh
+php artisan make:controller Api/LeaderController
+```
+
+Open `app/Http/Controllers/Api/LeaderController.php` and implement API methods:
+
+```php
+namespace App\Http\Controllers\Api;
+
+use App\Models\Leader;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class LeaderController extends Controller
+{
+    public function index()
+    {
+        return response()->json(Leader::all());
+    }
+}
+```
+
+## 4. Define API Routes
+
+Open `routes/api.php` and define the API route:
+
+```php
+use App\Http\Controllers\Api\LeaderController;
+
+Route::get('/leaders', [LeaderController::class, 'index']);
+```
+
+## 5. Seed Leaders Table (Optional)
+
+Run the following command to create a seeder:
+
+```sh
+php artisan make:seeder LeaderSeeder
+```
+
+Open `database/seeders/LeaderSeeder.php` and add sample data:
+
+```php
+use Illuminate\Database\Seeder;
+use App\Models\Leader;
+
+class LeaderSeeder extends Seeder
+{
+    public function run()
+    {
+        Leader::create([
+            'name' => 'Punam Jagdish Marathe',
+            'title' => 'Director',
+            'icon' => 'crown',
+            'image_url' => 'leaders/user1.jpg',
+            'description' => 'Punam leads Suviam with strategic vision, ensuring long-term growth and innovation.',
+        ]);
+
+    }
+}
+```
+
+Run the seeder:
+
+```sh
+php artisan db:seed --class=LeaderSeeder
+```
+
+## 6. Create Filament Resource for Leaders
+
+### Install Filament (if not already installed)
+
+```sh
+composer require filament/filament
+php artisan filament:install --panels
+```
+
+### Create Filament Resource
+
+```sh
+php artisan make:filament-resource Leader
+```
+
+### Customize Filament Resource
+
+Open `app/Filament/Resources/LeaderResource.php` and modify:
+
+```php
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\LeaderResource\Pages;
+use App\Models\Leader;
+use Filament\Forms;
+use Filament\Resources\Form;
+use Filament\Resources\Resource;
+use Filament\Resources\Table;
+use Filament\Tables;
+
+class LeaderResource extends Resource
+{
+    protected static ?string $model = Leader::class;
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('name')->required(),
+                Forms\Components\TextInput::make('title')->required(),
+                Forms\Components\TextInput::make('icon')->required(),
+                Forms\Components\FileUpload::make('image_url')
+                    ->label('Leader Image')
+                    ->image()
+                    ->directory('leaders')
+                    ->preserveFilenames()
+                    ->required(),
+                Forms\Components\Textarea::make('description')->required(),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\ImageColumn::make('image_url')->label('Leader Image')->disk('public'),
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('title'),
+                Tables\Columns\TextColumn::make('description')->limit(50),
+            ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListLeaders::route('/'),
+            'create' => Pages\CreateLeader::route('/create'),
+            'edit' => Pages\EditLeader::route('/{record}/edit'),
+        ];
+    }
+}
+```
+
+## 7. Integrate API in React Frontend
+
+Modify `VisionaryLeaders.js` to fetch data dynamically:
+
+```jsx
+import React, { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/autoplay";
+import { Autoplay, Pagination } from "swiper/modules";
+import axios from "axios";
+
+const VisionaryLeaders = () => {
+  const [leaders, setLeaders] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/api/leaders")
+      .then((response) => setLeaders(response.data))
+      .catch((error) => console.error("Error fetching leaders:", error));
+  }, []);
+
+  return (
+    <section className="max-container bg-blue-50 py-24 text-gray-700">
+      <Swiper
+        autoplay={{ delay: 3000 }}
+        pagination={{ clickable: true }}
+        modules={[Autoplay, Pagination]}
+      >
+        {leaders.map((leader, index) => (
+          <SwiperSlide key={index}>
+            <div className="text-center">
+              <img
+                src={`http://127.0.0.1:8000/storage/${leader.image_url}`}
+                alt={leader.name}
+                className="rounded-lg"
+              />
+              <h4>{leader.name}</h4>
+              <p>{leader.title}</p>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </section>
+  );
+};
+
+export default VisionaryLeaders;
+```

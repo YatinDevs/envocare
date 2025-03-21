@@ -24,7 +24,7 @@ const Contact = () => {
     },
     {
       icon: <MailOutlined className="text-blue-600 text-2xl mr-4" />,
-      info: "suviaminfra@gmail.com",
+      info: "envocares@gmail.com",
     },
     {
       icon: <EnvironmentOutlined className="text-blue-600 text-2xl mr-4" />,
@@ -43,7 +43,7 @@ const Contact = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="bg-gradient-to-r rounded-2xl from-orange-100 via-orange-200 to-orange-400 "
+      className="bg-gradient-to-r mt-18 rounded-2xl from-orange-100 via-orange-200 to-orange-400 "
     >
       <div className="p-4 md:p-8 w-full">
         <motion.h1
@@ -67,7 +67,7 @@ const Contact = () => {
                 <iframe
                   title="Google Map"
                   className="w-full h-110 text-2xl rounded-md border border-gray-300 shadow-sm"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3795.3397927308296!2d73.9549263749955!3d20.76456478074188!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bddea3e79b15e27%3A0x30e792c6a7cbcb3e!2sGat%20No.%20211%2C%20At%20Post%3A%20Savaki(Lo)%2C%20Tal-Deola%2C%20Dist-Nashik!5e0!3m2!1sen!2sin!4v1707568399102!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3748.9203686043675!2d73.76542404051962!3d20.011856581472518!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bddeb9776aba275%3A0xcf7ba1b5d2616420!2sArchit%20Vihar%20Apartment!5e0!3m2!1sen!2sin!4v1742554911440!5m2!1sen!2sin"
                   allowFullScreen=""
                   loading="lazy"
                 />
